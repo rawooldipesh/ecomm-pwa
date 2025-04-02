@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="My Ecommerce Store">
+  
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service_worker.js')
+        .then((registration) => {
+          console.log("Custom Service Worker Registered:", registration);
+  
+          // Wait until the service worker is activated before using sync
+          navigator.serviceWorker.ready.then((swRegistration) => {
+            if ('sync' in swRegistration) {
+              swRegistration.sync.register('sync-cart').then(() => {
+                console.log("Background Sync Registered");
+              }).catch((err) => {
+                console.error("Background Sync Failed:", err);
+              });
+            } else {
+              console.log("SyncManager not supported in this browser.");
+            }
+          });
+        })
+        .catch((error) => {
+          console.log("Service Worker Registration Failed:", error);
+        });
+    }
+  </script>
+  
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>My Ecommerce Store</title>
+</head>
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
